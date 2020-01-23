@@ -25,8 +25,9 @@ class ForumService:
     @staticmethod
     @runner.hookimpl
     def local_compose_options(project: Project) -> Dict[str, Union[str, List[str]]]:
-        if "derex.forum" in project.config.plugins:
-            options = ["-f", generate_local_docker_compose(project)]
+        if "derex.forum" in project.config.get("plugins", {}):
+            local_compose_path = generate_local_docker_compose(project)
+            options = ["-f", str(local_compose_path)]
             return {
                 "options": options,
                 "name": "forum",
