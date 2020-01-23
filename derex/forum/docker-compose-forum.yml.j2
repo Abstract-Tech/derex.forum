@@ -3,14 +3,9 @@ version: "3.5"
 services:
   forum:
     image: derex/forum-ironwood
-    ports:
-      - 4567:4567
     environment:
       API_KEY: "forumapikey"
       SEARCH_SERVER: "http://elasticsearch:9200"
-      MONGODB_DB: "derex_forum"
-      MONGODB_AUTH: ""
-      MONGODB_HOST: "mongodb"
-      MONGODB_PORT: "27017"
+      MONGOHQ_URL: "mongodb://mongodb:27017/{{ project.name }}_forum"
     networks:
       derex:
