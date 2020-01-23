@@ -1,0 +1,21 @@
+schedules:
+  - cron: "30 06 * * *"
+    displayName: Daily build
+    branches:
+      include:
+        - master
+    always: true
+
+jobs:
+  - job: RunPytests
+    timeoutInMinutes: 40
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '3.7'
+        displayName: 'Use Python 3.7'
+
+      - script: pip install -r requirements.txt
+        displayName: 'Install dependencies'
