@@ -10,7 +10,10 @@ with open('README.rst') as readme_file:
 with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=7.0', ]
+requirements = [
+    "derex.runner",
+    "jinja2"
+]
 
 setup_requirements = ['pytest-runner', ]
 
@@ -34,6 +37,9 @@ setup(
     description="Derex Plugin to integrate Open edX Forum",
     entry_points={"derex.runner": ["demo=derex.forum.config:ForumService"]},
     install_requires=requirements,
+    dependency_links=[
+        "http://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner"
+    ],
     license="GNU General Public License v3",
     long_description=readme + '\n\n' + history,
     include_package_data=True,
