@@ -17,7 +17,7 @@ jobs:
           versionSpec: '3.7'
         displayName: 'Use Python 3.7'
 
-      - script: pip install -r requirements.txt
+      - script: pip install -r requirements.txt; pip install -e .
         displayName: 'Install dependencies'
 
       - script: ddc-services up -d
