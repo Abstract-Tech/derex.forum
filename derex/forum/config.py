@@ -1,21 +1,36 @@
-import logging
 import pkg_resources
 from typing import List, Dict, Union
+from pathlib import Path
+from jinja2 import Template
 
 from derex import runner  # type: ignore
+from derex.runner.project import Project
+
+
+def generate_local_docker_compose(project: Project) -> Path:
+    derex_dir = project.root / ".derex"
+    if not derex_dir.is_dir():
+        derex_dir.mkdir()
+    local_compose_path = derex_dir / "docker-compose-forum.yml"
+    template_path = Path(
+        pkg_resources.resource_filename(__name__, "docker-compose-forum.yml.j2")
+    )
+    tmpl = Template(template_path.read_text())
+    text = tmpl.render(project=project)
+    local_compose_path.write_text(text)
+    return local_compose_path
 
 
 class ForumService:
     @staticmethod
     @runner.hookimpl
-    def local_compose_options() -> Dict[str, Union[str, List[str]]]:
-        options = [
-            "-f",
-            pkg_resources.resource_filename(__name__, "docker-compose.yml")
-        ]
-        return {
-            "options": options,
-            "name": "forum",
-            "priority": ">base",
-            "variant": "openedx",
-        }
+    def local_compose_options(project: Project) -> Dict[str, Union[str, List[str]]]:
+        if "derex.forum" in project.config.plugins:
+            options = ["-f", generate_local_docker_compose(project)]
+            return {
+                "options": options,
+                "name": "forum",
+                "priority": ">base",
+                "variant": "openedx",
+            }
+        return {}
