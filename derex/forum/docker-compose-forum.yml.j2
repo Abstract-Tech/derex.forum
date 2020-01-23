@@ -3,6 +3,7 @@ version: "3.5"
 services:
   forum:
     image: derex/forum-ironwood
+    container_name: "{{ project.name}}_forum"
     environment:
       API_KEY: "forumapikey"
       SEARCH_SERVER: "http://elasticsearch:9200"
