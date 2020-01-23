@@ -19,3 +19,22 @@ jobs:
 
       - script: pip install -r requirements.txt
         displayName: 'Install dependencies'
+
+      - script: ddc-services up -d
+        displayName: 'Start services'
+
+      - script: |
+          set -ex
+          cd tests/fixtures/forum/
+          ddc-project config
+          ddc-project up -d lms forum
+        displayName: 'Start lms and forum'
+
+      - script: derex reset-rabbitmq; derex reset-mysql
+        displayName: 'Prime Mysql and rabbitmq'
+
+      - script: |
+          set -ex
+          cd tests/fixtures/forum/
+          ddc-project logs
+        displayName: 'Show logs'
