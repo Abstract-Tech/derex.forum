@@ -5,6 +5,7 @@ Credits
 Development Lead
 ----------------
 
+* Silvio Tomatis <silviot@gmail.com>
 * Chiruzzi Marco <chiruzzi.marco@gmail.com>
 
 Contributors
