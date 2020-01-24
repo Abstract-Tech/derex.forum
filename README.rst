@@ -3,30 +3,45 @@ Derex Forum
 ===========
 
 
-.. image:: https://img.shields.io/pypi/v/derex.forum.svg
-        :target: https://pypi.python.org/pypi/derex.forum
-
-.. image:: https://img.shields.io/travis/Abstract-Tech/derex.forum.svg
-        :target: https://travis-ci.org/Abstract-Tech/derex.forum
-
-.. image:: https://readthedocs.org/projects/derex.forum/badge/?version=latest
-        :target: https://derex.forum.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
+.. image:: https://dev.azure.com/abstract-technology/derex.forum/_apis/build/status/Abstract-Tech.derex.forum?branchName=master
+    :target: https://dev.azure.com/abstract-technology/derex.forum/_build
 
 
 Derex Plugin to integrate Open edX Forum
 
 
-* Free software: MIT license
-* Documentation: https://derex.forum.readthedocs.io.
+Setup
+-----
+
+* Install this package inside a derex project environment
+* Add to the project derex.config.yaml ::
 
 
-Features
---------
+    plugins:
+      derex.forum: {}
 
-* TODO
+
+* Add to the project Django settings ::
+
+    COMMENTS_SERVICE_URL = 'http://forum:4567'
+    COMMENTS_SERVICE_KEY = 'forumapikey'
+
+    FEATURES["ENABLE_DISCUSSION_SERVICE"] = True
+
+
+Development
+-----------
+
+* Install direnv_
+* Allow direnv to create the virtualenv ::
+
+    direnv allow
+
+* Install with pip ::
+
+    pip install -r requirements.txt
+    pre-commit install --install-hooks
+
 
 Credits
 -------
@@ -35,3 +50,4 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+.. _direnv: https://direnv.net/docs/installation.html
