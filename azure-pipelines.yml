@@ -1,0 +1,60 @@
+schedules:
+  - cron: "30 06 * * *"
+    displayName: Daily build
+    branches:
+      include:
+        - master
+    always: true
+
+jobs:
+  - job: SetupAndTest
+    timeoutInMinutes: 40
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: "3.7"
+        displayName: "Use Python 3.7"
+
+      - script: pip install -r requirements.txt; pip install -e .
+        displayName: "Install dependencies"
+
+      - script: ddc-services up -d
+        displayName: "Start services"
+
+      - script: |
+          set -ex
+          cd tests/fixtures/minimal/
+          derex reset-mysql
+          derex reset-rabbitmq
+          derex provision-forum
+        displayName: "Prime Mysql, Rabbitmq and Elasticsearch"
+
+      - script: |
+          set -ex
+          cd tests/fixtures/minimal/
+          ddc-project config
+          ddc-project up -d lms forum
+        displayName: "Start lms and forum"
+
+      - script: |
+          set -ex
+          cd tests/fixtures/minimal/
+          ddc-project logs
+        displayName: "Show logs"
+
+      - script: |
+          cd tests/fixtures/minimal/
+          WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
+          until [ $WORKERS_READY -gt 0 ]; do
+              echo "Waiting for forum service workers to be ready..."
+              echo $(ddc-project logs --tail=1 forum)
+              sleep 1
+              WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
+          done
+          echo "Forum service workers are ready !"
+          echo $(ddc-project logs --tail=5 forum)
+          exit 0
+        timeoutInMinutes: 1
+        displayName: "Test that forum workers are ready"
