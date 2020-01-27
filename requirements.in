@@ -1,4 +1,4 @@
-https://github.com/Abstract-Tech/derex.runner/tarball/feature/plugin-command#egg=derex.runner
+https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner
 jinja2
 pre-commit
 pytest
