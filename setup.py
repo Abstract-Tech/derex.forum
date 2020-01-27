@@ -35,7 +35,12 @@ setup(
         "Programming Language :: Python :: 3.8",
     ],
     description="Derex Plugin to integrate Open edX Forum",
-    entry_points={"derex.runner": ["demo=derex.forum.config:ForumService"]},
+    entry_points={
+        "derex.runner": ["demo=derex.forum.config:ForumService"],
+        "derex.runner.cli_plugins": [
+            "provision-forum=derex.forum.cli:provision_forum_cmd"
+        ],
+    },
     install_requires=requirements,
     license="GNU General Public License v3",
     long_description=readme + "\n\n" + history,
