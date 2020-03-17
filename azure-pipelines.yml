@@ -7,28 +7,19 @@ schedules:
     always: true
 
 jobs:
-  - job: SetupAndTest
+  - job: TestMinimal
     timeoutInMinutes: 40
     pool:
       vmImage: "ubuntu-latest"
     steps:
-      - task: UsePythonVersion@0
-        inputs:
-          versionSpec: "3.7"
-        displayName: "Use Python 3.7"
-
-      - script: pip install -r requirements.txt; pip install -e .
-        displayName: "Install dependencies"
-
-      - script: ddc-services up -d
-        displayName: "Start services"
+      - template: azure-pipelines/setup.yml
 
       - script: |
           set -ex
           cd tests/fixtures/minimal/
           derex reset-mysql
           derex reset-rabbitmq
-          derex provision-forum
+          derex forum create-index
         displayName: "Prime Mysql, Rabbitmq and Elasticsearch"
 
       - script: |
