@@ -2,20 +2,21 @@ import click
 from derex.runner.cli import ensure_project
 
 
-@click.command("provision-forum")
+@click.group()
+@click.pass_context
+def forum(ctx):
+    """Derex edX Forum plugin: commands to manage the Open edX Forum service
+    """
+    pass
+
+
+@forum.command("create-index")
 @click.pass_obj
 @ensure_project
-def provision_forum_cmd(project):
-    """Prime the elasticsearch index for the forum service"""
+def create_index(project):
+    """Prime the elasticsearch index for the Forum service"""
     from derex.runner.docker import check_services
     from derex.runner.compose_utils import run_compose
-
-    if "derex.forum" not in project.config.get("plugins", {}):
-        click.echo(
-            "Forum is not enabled for this project.\n"
-            "Enable it by installing the derex.forum plugin."
-        )
-        return
 
     if not check_services(["elasticsearch"]):
         click.echo(
