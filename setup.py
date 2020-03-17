@@ -37,9 +37,7 @@ setup(
     description="Derex Plugin to integrate Open edX Forum",
     entry_points={
         "derex.runner": ["demo=derex.forum.config:ForumService"],
-        "derex.runner.cli_plugins": [
-            "provision-forum=derex.forum.cli:provision_forum_cmd"
-        ],
+        "derex.runner.cli_plugins": ["forum=derex.forum.cli:forum"],
     },
     install_requires=requirements,
     license="GNU General Public License v3",
