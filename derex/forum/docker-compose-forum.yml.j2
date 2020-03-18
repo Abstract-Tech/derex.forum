@@ -2,7 +2,7 @@ version: "3.5"
 
 services:
   forum:
-    image: derex/forum:ironwood
+    image: {{ forum_docker_image }}
     container_name: "{{ project.name}}_forum"
     environment:
       API_KEY: "forumapikey"

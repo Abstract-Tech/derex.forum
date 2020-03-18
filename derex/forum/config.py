@@ -1,10 +1,11 @@
-import pkg_resources
-from typing import List, Dict, Union
 from pathlib import Path
-from jinja2 import Template
+from typing import Dict, List, Union
+
+import pkg_resources
 
 from derex import runner  # type: ignore
 from derex.runner.project import Project
+from jinja2 import Template
 
 
 def generate_local_docker_compose(project: Project) -> Path:
@@ -15,8 +16,11 @@ def generate_local_docker_compose(project: Project) -> Path:
     template_path = Path(
         pkg_resources.resource_filename(__name__, "docker-compose-forum.yml.j2")
     )
+    forum_docker_image = project.config.get(
+        "forum_docker_image", "derex/forum:ironwood"
+    )
     tmpl = Template(template_path.read_text())
-    text = tmpl.render(project=project)
+    text = tmpl.render(project=project, forum_docker_image=forum_docker_image)
     local_compose_path.write_text(text)
     return local_compose_path
 
