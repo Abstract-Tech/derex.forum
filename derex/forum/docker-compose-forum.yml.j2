@@ -5,8 +5,12 @@ services:
     image: {{ forum_docker_image }}
     container_name: "{{ project.name}}_forum"
     environment:
+      SERVICE_VARIANT: forum
       API_KEY: "forumapikey"
       SEARCH_SERVER: "http://elasticsearch:9200"
       MONGOHQ_URL: "mongodb://mongodb:27017/{{ project.name }}_forum"
+      {%- for key, value in project.get_container_env().items() %}
+      {{ key }}: {{ value | tojson }}
+      {%- endfor %}
     networks:
       derex:
