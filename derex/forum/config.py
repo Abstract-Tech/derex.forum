@@ -35,7 +35,7 @@ class ForumService:
             return {
                 "options": options,
                 "name": "forum",
-                "priority": ">base",
+                "priority": "<local-derex",
                 "variant": "openedx",
             }
         return {}
