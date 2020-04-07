@@ -3,7 +3,7 @@ Derex Forum
 ===========
 
 
-.. image:: https://dev.azure.com/abstract-technology/derex.forum/_apis/build/status/Abstract-Tech.derex.forum?branchName=master
+.. image:: https://dev.azure.com/abstract-technology/derex/_apis/build/status/Abstract-Tech.derex.forum?branchName=master
     :target: https://dev.azure.com/abstract-technology/derex.forum/_build
 
 
