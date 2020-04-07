@@ -1,5 +1,5 @@
 schedules:
-  - cron: "30 06 * * *"
+  - cron: "20 05 * * *"
     displayName: Daily build
     branches:
       include:
@@ -7,45 +7,12 @@ schedules:
     always: true
 
 jobs:
-  - job: TestMinimal
-    timeoutInMinutes: 40
-    pool:
-      vmImage: "ubuntu-latest"
-    steps:
-      - template: azure-pipelines/setup.yml
+  - template: azure-pipelines/minimal.yml
+    parameters:
+      JOB_VARIANT: UnPinned
+      PIN_VERSIONS:
 
-      - script: |
-          set -ex
-          cd tests/fixtures/minimal/
-          derex reset-mysql
-          derex reset-rabbitmq
-          derex forum create-index
-        displayName: "Prime Mysql, Rabbitmq and Elasticsearch"
-
-      - script: |
-          set -ex
-          cd tests/fixtures/minimal/
-          ddc-project config
-          ddc-project up -d lms forum
-        displayName: "Start lms and forum"
-
-      - script: |
-          set -ex
-          cd tests/fixtures/minimal/
-          ddc-project logs
-        displayName: "Show logs"
-
-      - script: |
-          cd tests/fixtures/minimal/
-          WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
-          until [ $WORKERS_READY -gt 0 ]; do
-              echo "Waiting for forum service workers to be ready..."
-              echo $(ddc-project logs --tail=1 forum)
-              sleep 1
-              WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
-          done
-          echo "Forum service workers are ready !"
-          echo $(ddc-project logs --tail=5 forum)
-          exit 0
-        timeoutInMinutes: 1
-        displayName: "Test that forum workers are ready"
+  - template: azure-pipelines/minimal.yml
+    parameters:
+      JOB_VARIANT: Pinned
+      PIN_VERSIONS: yes
