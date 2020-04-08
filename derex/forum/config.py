@@ -38,4 +38,4 @@ class ForumService:
                 "priority": "<local-derex",
                 "variant": "openedx",
             }
-        return {}
+        return None
