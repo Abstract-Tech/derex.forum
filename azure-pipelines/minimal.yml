@@ -19,7 +19,7 @@ jobs:
       - script: |
           set -ex
           cd tests/fixtures/minimal/
-          derex reset-mysql
+          derex mysql reset
           derex reset-rabbitmq
           derex forum create-index
         displayName: "Prime Mysql, Rabbitmq and Elasticsearch"
