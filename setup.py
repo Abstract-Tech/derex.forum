@@ -36,7 +36,7 @@ setup(
     ],
     description="Derex Plugin to integrate Open edX Forum",
     entry_points={
-        "derex.runner": ["demo=derex.forum.config:ForumService"],
+        "derex.runner": ["forum=derex.forum.config:ForumService"],
         "derex.runner.cli_plugins": ["forum=derex.forum.cli:forum"],
     },
     install_requires=requirements,
