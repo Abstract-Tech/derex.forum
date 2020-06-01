@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Dict, List, Optional, Union
+from typing import Dict, List, Union
 
 import pkg_resources
 
@@ -30,14 +30,13 @@ class ForumService:
     @runner.hookimpl
     def ddc_project_options(
         project: Project,
-    ) -> Optional[Dict[str, Union[str, float, int, List[str]]]]:
+    ) -> Dict[str, Union[str, float, int, List[str]]]:
+        options: List[str] = []
         if "derex.forum" in project.config.get("plugins", {}):
             local_compose_path = generate_local_docker_compose(project)
             options = ["-f", str(local_compose_path)]
-            return {
-                "options": options,
-                "name": "forum",
-                "priority": "<local-project",
-                "variant": "openedx",
-            }
-        return None
+        return {
+            "options": options,
+            "name": "forum",
+            "priority": ">base-project",
+        }
