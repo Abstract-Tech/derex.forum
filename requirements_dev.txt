@@ -17,7 +17,7 @@ click==7.1.2              # via -r requirements.txt, click-plugins, derex.runner
 colorama==0.4.3           # via -r requirements.txt, rich
 commonmark==0.9.1         # via -r requirements.txt, rich
 cryptography==2.9.2       # via -r requirements.txt, paramiko
-https://github.com/Abstract-Tech/derex.runner/tarball/5c93452178f539c4e767d2c8f17e5ce5c13e6c5d#egg=derex.runner  # via -r requirements.txt
+https://github.com/Abstract-Tech/derex.runner/tarball/e83b019be5db61a71f8f7350d02bae0baf0f3926#egg=derex.runner  # via -r requirements.txt
 distlib==0.3.0            # via virtualenv
 distro==1.5.0             # via -r requirements.txt, docker-compose
 docker-compose==1.26.0    # via -r requirements.txt, derex.runner
