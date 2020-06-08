@@ -28,14 +28,13 @@ def generate_local_docker_compose(project: Project) -> Path:
 class ForumService:
     @staticmethod
     @runner.hookimpl
-    def local_compose_options(project: Project) -> Dict[str, Union[str, List[str]]]:
+    def ddc_project_options(project: Project) -> Dict[str, Union[str, List[str]]]:
+        options: List[str] = []
         if "derex.forum" in project.config.get("plugins", {}):
             local_compose_path = generate_local_docker_compose(project)
             options = ["-f", str(local_compose_path)]
-            return {
-                "options": options,
-                "name": "forum",
-                "priority": "<local-derex",
-                "variant": "openedx",
-            }
-        return None
+        return {
+            "options": options,
+            "name": "forum",
+            "priority": "<local-project",
+        }

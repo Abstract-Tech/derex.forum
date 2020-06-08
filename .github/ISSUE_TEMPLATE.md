@@ -1,6 +1,6 @@
-* Derex Forum version:
-* Python version:
-* Operating System:
+- Derex Forum version:
+- Python version:
+- Operating System:
 
 ### Description
 

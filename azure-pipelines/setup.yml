@@ -1,16 +1,19 @@
+parameters:
+  - name: JOB_VARIANT
+    type: string
+
 steps:
   - task: UsePythonVersion@0
     inputs:
-      versionSpec: '3.7'
-    displayName: 'Use Python 3.7'
+      versionSpec: "3.7"
+    displayName: "Use Python 3.7"
 
   - script: |
       set -ex
       pip3 install -U pip setuptools
-      [ -z "${{ parameters.PIN_VERSIONS }}" ] && pip3 install -r requirements_dev.txt .
-      [ ! -z "${{ parameters.PIN_VERSIONS }}" ] && pip3 install . https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner
-      true
-    displayName: 'Install derex.runner'
+      { [ "${{ parameters.JOB_VARIANT }}" == "Pinned" ] && pip3 install -r requirements_dev.txt . || true; }
+      { [ "${{ parameters.JOB_VARIANT }}" != "Pinned" ] && pip3 install . https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner || true; }
+    displayName: "Install derex.runner"
 
   - script: ddc-services up -d
     displayName: "Start services"

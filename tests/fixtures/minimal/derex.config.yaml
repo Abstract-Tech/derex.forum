@@ -1,4 +1,4 @@
 ---
-project_name: forum_minimal
+project_name: forum-minimal
 plugins:
   derex.forum: {}

@@ -29,6 +29,12 @@ Setup
     FEATURES["ENABLE_DISCUSSION_SERVICE"] = True
 
 
+* Create the Elasticsearch index ::
+
+
+    derex forum create-index
+
+
 Development
 -----------
 
