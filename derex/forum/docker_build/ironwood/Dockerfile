@@ -1,7 +1,7 @@
 FROM ruby:2.4.1
-MAINTAINER Chiruzzi Marco <chiruzzi.marco@gmail.com>
+LABEL maintainer="Chiruzzi Marco <chiruzzi.marco@gmail.com>"
 
-# throw errors if Gemfile has been modified since Gemfile.lock
+# Throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
 # Upgrade bundler to the Gemfile specified version
@@ -10,7 +10,9 @@ RUN gem install bundler -v 1.16.1
 RUN mkdir -p /openedx/forum
 WORKDIR /openedx/forum
 
-RUN wget -O - https://github.com/edx/cs_comments_service/tarball/open-release/ironwood.master | tar xzf - --strip-components 1
+RUN wget -O - \
+    https://github.com/edx/cs_comments_service/tarball/open-release/ironwood.master | \
+    tar xzf - --strip-components 1
 RUN bundle install --deployment
 
 ENV RACK_ENV staging

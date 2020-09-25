@@ -17,7 +17,7 @@ def generate_local_docker_compose(project: Project) -> Path:
         pkg_resources.resource_filename(__name__, "docker-compose-forum.yml.j2")
     )
     forum_docker_image = project.config.get(
-        "forum_docker_image", "derex/forum:ironwood"
+        "forum_docker_image", f"derex/forum:{project.openedx_version.name}"
     )
     tmpl = Template(template_path.read_text())
     text = tmpl.render(project=project, forum_docker_image=forum_docker_image)

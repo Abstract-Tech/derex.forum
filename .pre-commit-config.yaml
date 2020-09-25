@@ -1,3 +1,4 @@
+exclude: examples/.*/settings/derex/.*
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.4.0
@@ -13,7 +14,7 @@ repos:
     rev: v0.740
     hooks:
       - id: mypy
-        exclude: docs/conf.py
+        exclude: docs/conf.py|examples
         args:
           - --ignore-missing-imports
 

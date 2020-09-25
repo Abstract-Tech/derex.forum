@@ -1,0 +1,5 @@
+---
+project_name: forum-minimal-juniper
+openedx_version: juniper
+plugins:
+  derex.forum: {}
