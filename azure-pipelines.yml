@@ -7,10 +7,11 @@ schedules:
     always: true
 
 jobs:
-  - template: azure-pipelines/minimal.yml
+  - template: azure-pipelines/test.yml
     parameters:
-      JOB_VARIANT: UnPinned
-
-  - template: azure-pipelines/minimal.yml
+      OPENEDX_RELEASE: ironwood
+      OPENEDX_RELEASE_CAPITALIZED: Ironwood
+  - template: azure-pipelines/test.yml
     parameters:
-      JOB_VARIANT: Pinned
+      OPENEDX_RELEASE: juniper
+      OPENEDX_RELEASE_CAPITALIZED: Juniper
