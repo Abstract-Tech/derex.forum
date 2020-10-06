@@ -8,7 +8,7 @@ services:
       SERVICE_VARIANT: forum
       API_KEY: "forumapikey"
       SEARCH_SERVER: "http://elasticsearch:9200"
-      MONGOHQ_URL: "mongodb://root:{{ project.secret("mongodb") }}@mongodb:27017/{{ project.name }}_forum"
+      MONGOHQ_URL: "mongodb://{{ MONGODB_ROOT_USER }}:{{ MONGODB_ROOT_PASSWORD }}@mongodb:27017/{{ project.name }}_forum"
       {%- for key, value in project.get_container_env().items() %}
       {{ key }}: {{ value | tojson }}
       {%- endfor %}
