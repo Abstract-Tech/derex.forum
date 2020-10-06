@@ -21,5 +21,7 @@ ENV API_KEY forumapikey
 ENV SEARCH_SERVER "http://elasticsearch:9200"
 # Juniper release enforce authentication on the MongoDB database
 ENV MONGOHQ_URL "mongodb://root:secret@mongodb:27017/derex_forum"
+ENV MONGOID_AUTH_MECH=":scram"
+ENV MONGOID_AUTH_SOURCE="admin"
 EXPOSE 4567
 CMD /openedx/forum/bin/unicorn -c config/unicorn_tcp.rb -I '.'
