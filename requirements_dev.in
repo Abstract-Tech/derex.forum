@@ -1,4 +1,6 @@
 -r requirements.txt
 -r requirements_doc.txt
 
+bump2version
+pip-tools
 pre-commit
