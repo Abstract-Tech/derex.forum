@@ -5,6 +5,7 @@ from typing import Dict, List, Union
 import pkg_resources
 
 from derex import runner  # type: ignore
+from derex.forum import __version__
 from derex.runner.constants import MONGODB_ROOT_USER
 from derex.runner.mongodb import MONGODB_ROOT_PASSWORD
 from derex.runner.project import Project
@@ -20,7 +21,8 @@ def generate_local_docker_compose(project: Project) -> Path:
         pkg_resources.resource_filename(__name__, "docker-compose-forum.yml.j2")
     )
     forum_docker_image = project.config.get(
-        "forum_docker_image", f"derex/forum:{project.openedx_version.name}"
+        "forum_docker_image",
+        f"derex/forum-{project.openedx_version.name}:{__version__}",
     )
     mongodb_root_user = urllib.parse.quote_plus(MONGODB_ROOT_USER)
     mongodb_root_password = urllib.parse.quote_plus(MONGODB_ROOT_PASSWORD)

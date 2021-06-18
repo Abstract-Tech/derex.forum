@@ -15,3 +15,7 @@ jobs:
     parameters:
       OPENEDX_RELEASE: juniper
       OPENEDX_RELEASE_CAPITALIZED: Juniper
+  - template: azure-pipelines/test.yml
+    parameters:
+      OPENEDX_RELEASE: koa
+      OPENEDX_RELEASE_CAPITALIZED: Koa
