@@ -1,0 +1,26 @@
+parameters:
+  - name: OPENEDX_RELEASE
+    type: string
+  - name: OPENEDX_RELEASE_CAPITALIZED
+    type: string
+
+jobs:
+  - job: Minimal${{ parameters.OPENEDX_RELEASE_CAPITALIZED }}UnPinned
+    timeoutInMinutes: 40
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - template: test_project.yml
+        parameters:
+          JOB_VARIANT: UnPinned
+          OPENEDX_RELEASE: ${{ parameters.OPENEDX_RELEASE }}
+
+  - job: Minimal${{ parameters.OPENEDX_RELEASE_CAPITALIZED }}Pinned
+    timeoutInMinutes: 40
+    pool:
+      vmImage: "ubuntu-latest"
+    steps:
+      - template: test_project.yml
+        parameters:
+          JOB_VARIANT: Pinned
+          OPENEDX_RELEASE: ${{ parameters.OPENEDX_RELEASE }}

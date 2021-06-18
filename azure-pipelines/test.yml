@@ -1,26 +1,15 @@
-parameters:
-  - name: OPENEDX_RELEASE
-    type: string
-  - name: OPENEDX_RELEASE_CAPITALIZED
-    type: string
-
-jobs:
-  - job: Minimal${{ parameters.OPENEDX_RELEASE_CAPITALIZED }}UnPinned
-    timeoutInMinutes: 40
-    pool:
-      vmImage: "ubuntu-latest"
-    steps:
-      - template: minimal.yml
+stages:
+  - stage: Test
+    jobs:
+      - template: test_version.yml
         parameters:
-          JOB_VARIANT: UnPinned
-          OPENEDX_RELEASE: ${{ parameters.OPENEDX_RELEASE }}
-
-  - job: Minimal${{ parameters.OPENEDX_RELEASE_CAPITALIZED }}Pinned
-    timeoutInMinutes: 40
-    pool:
-      vmImage: "ubuntu-latest"
-    steps:
-      - template: minimal.yml
+          OPENEDX_RELEASE: ironwood
+          OPENEDX_RELEASE_CAPITALIZED: Ironwood
+      - template: test_version.yml
         parameters:
-          JOB_VARIANT: Pinned
-          OPENEDX_RELEASE: ${{ parameters.OPENEDX_RELEASE }}
+          OPENEDX_RELEASE: juniper
+          OPENEDX_RELEASE_CAPITALIZED: Juniper
+      - template: test_version.yml
+        parameters:
+          OPENEDX_RELEASE: koa
+          OPENEDX_RELEASE_CAPITALIZED: Koa

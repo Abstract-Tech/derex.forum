@@ -1,0 +1,74 @@
+stages:
+  - stage: Build
+    jobs:
+      - job: IronwoodPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: ironwood
+          - name: JOB_VARIANT
+            value: Pinned
+        steps:
+          - template: build_single_version.yml
+
+      - job: IronwoodUnPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: ironwood
+          - name: JOB_VARIANT
+            value: UnPinned
+        steps:
+          - template: build_single_version.yml
+
+      - job: JuniperPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: juniper
+          - name: JOB_VARIANT
+            value: Pinned
+        steps:
+          - template: build_single_version.yml
+
+      - job: JuniperUnPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: juniper
+          - name: JOB_VARIANT
+            value: UnPinned
+        steps:
+          - template: build_single_version.yml
+
+      - job: KoaPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: koa
+          - name: JOB_VARIANT
+            value: Pinned
+        steps:
+          - template: build_single_version.yml
+
+      - job: KoaUnPinned
+        timeoutInMinutes: 180
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: koa
+          - name: JOB_VARIANT
+            value: UnPinned
+        steps:
+          - template: build_single_version.yml
