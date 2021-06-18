@@ -1,6 +1,6 @@
 ---
-project_name: forum-juniper-minimal
-openedx_version: juniper
+project_name: forum-koa-minimal
+openedx_version: koa
 materialize_derex_settings: false
 plugins:
   derex.forum: {}

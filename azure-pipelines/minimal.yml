@@ -21,6 +21,7 @@ steps:
       set -ex
       cd examples/${{ parameters.OPENEDX_RELEASE }}/
       ddc-project config
+      derex settings base
       ddc-project up -d lms forum
     displayName: "Start lms and forum"
 

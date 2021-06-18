@@ -53,4 +53,7 @@ setup(
     url="https://github.com/Abstract-Tech/derex.forum",
     version="0.1.0",
     zip_safe=False,
+    dependency_links=[
+        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.0.dev1#egg=derex.runner"
+    ],
 )

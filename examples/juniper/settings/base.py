@@ -1,4 +1,4 @@
-from .derex import *  # noqa
+from derex_django.settings.default import *  # noqa
 
 COMMENTS_SERVICE_URL = "http://forum:4567"
 COMMENTS_SERVICE_KEY = "forumapikey"
