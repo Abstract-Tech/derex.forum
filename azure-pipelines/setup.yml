@@ -1,6 +1,9 @@
 parameters:
   - name: JOB_VARIANT
     type: string
+  - name: AS_PYTHON_PACKAGE
+    type: boolean
+    default: False
 
 steps:
   - task: UsePythonVersion@0
@@ -9,11 +12,12 @@ steps:
     displayName: "Use Python 3.7"
 
   - script: |
-      set -ex
-      pip3 install -U pip setuptools
-      { [ "${{ parameters.JOB_VARIANT }}" == "Pinned" ] && pip3 install -r requirements_dev.txt . || true; }
-      { [ "${{ parameters.JOB_VARIANT }}" != "Pinned" ] && pip3 install . https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner || true; }
-    displayName: "Install derex.runner"
+      pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip -U pip setuptools
+      { [ "${{ parameters.JOB_VARIANT }}" == "Pinned" ] && pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip -r requirements_dev.txt || true; }
+      { [ "${{ parameters.JOB_VARIANT }}" != "Pinned" ] && pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip . https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner || true; }
+    displayName: "Install derex.runner and dev requirements"
 
-  - script: ddc-services up -d
-    displayName: "Start services"
+  - script: |
+      { [ "${{ parameters.AS_PYTHON_PACKAGE }}" == True ] && pip3 install . || true; }
+      { [ "${{ parameters.AS_PYTHON_PACKAGE }}" != True ] && pip3 install -e . || true; }
+    displayName: "Install derex.forum"

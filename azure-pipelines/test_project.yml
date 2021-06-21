@@ -8,6 +8,10 @@ steps:
   - template: setup.yml
     parameters:
       JOB_VARIANT: ${{ parameters.JOB_VARIANT }}
+      AS_PYTHON_PACKAGE: True
+
+  - script: ddc-services up -d
+    displayName: "Start services"
 
   - script: |
       set -ex
