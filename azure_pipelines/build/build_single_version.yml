@@ -58,6 +58,8 @@ steps:
     displayName: Install pixz
 
   - template: ../setup.yml
+    parameters:
+      CONDITION: and(succeeded(), ne(variables.needs_build, 'false'))
 
   - script: derex build forum --docker-opts "--cache-to=type=inline -o type=docker" $(OPENEDX_VERSION)
     condition: and(succeeded(), ne(variables.needs_build, 'false'))

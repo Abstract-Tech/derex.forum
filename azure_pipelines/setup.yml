@@ -1,4 +1,7 @@
 parameters:
+  - name: CONDITION
+    type: string
+    default: "true"
   - name: AS_PYTHON_PACKAGE
     type: boolean
     default: False
@@ -13,9 +16,11 @@ steps:
       pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip -U pip setuptools
       { [ "$(JOB_VARIANT)" == "Pinned" ] && pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip -r requirements_dev.txt || true; }
       { [ "$(JOB_VARIANT)" != "Pinned" ] && pip3 install --cache-dir $(Pipeline.Workspace)/.cache/pip . https://github.com/Abstract-Tech/derex.runner/tarball/master#egg=derex.runner || true; }
+    condition: ${{ parameters.CONDITION }}
     displayName: "Install derex.runner and dev requirements"
 
   - script: |
       { [ "${{ parameters.AS_PYTHON_PACKAGE }}" == True ] && pip3 install . || true; }
       { [ "${{ parameters.AS_PYTHON_PACKAGE }}" != True ] && pip3 install -e . || true; }
+    condition: ${{ parameters.CONDITION }}
     displayName: "Install derex.forum"
