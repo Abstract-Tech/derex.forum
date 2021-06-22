@@ -18,7 +18,7 @@ steps:
       ls -l $(IMAGE_CACHE_PATH)
       docker images
       set -euxo pipefail
-      cat $(IMAGE_CACHE_PATH)/edx-$(OPENEDX_VERSION).tar.xz | unxz | docker load
+      cat $(IMAGE_CACHE_PATH)/forum-$(OPENEDX_VERSION).tar.xz | unxz | docker load
       docker images
     condition: ${{ parameters.CONDITION }}
     displayName: "Load $(OPENEDX_VERSION) images"

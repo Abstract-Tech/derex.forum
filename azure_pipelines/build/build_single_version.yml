@@ -70,6 +70,6 @@ steps:
       docker save \
         $(derex build forum --only-print-image-name $(OPENEDX_VERSION)) \
         $(derex build forum --only-print-image-name $(OPENEDX_VERSION)) \
-        | pixz -0 > $(IMAGE_CACHE_PATH)/edx-$(OPENEDX_VERSION).tar.xz
+        | pixz -0 > $(IMAGE_CACHE_PATH)/forum-$(OPENEDX_VERSION).tar.xz
     condition: and(succeeded(), and(ne(variables.needs_build, 'false'), eq(variables.JOB_VARIANT, 'Pinned')))
     displayName: Save images
