@@ -51,7 +51,7 @@ steps:
       docker buildx create --use
       docker images
     condition: and(succeeded(), ne(variables.needs_build, 'false'))
-    displayName: Replace Microsoft docker with upsream docker and create build context
+    displayName: Replace Microsoft docker with upstream docker and create build context
 
   - script: sudo apt-get install pixz -y
     condition: and(succeeded(), ne(variables.needs_build, 'false'))
@@ -61,15 +61,14 @@ steps:
     parameters:
       CONDITION: and(succeeded(), ne(variables.needs_build, 'false'))
 
-  - script: derex build forum --docker-opts "--cache-to=type=inline -o type=docker" $(OPENEDX_VERSION)
+  - script: derex build forum --docker-opts "${CACHE_FROM_OPTS} --cache-to=type=inline -o type=docker" $(OPENEDX_VERSION)
     condition: and(succeeded(), ne(variables.needs_build, 'false'))
     displayName: Build docker image
 
   - script: |
       set -euxo pipefail;
-      docker save \
-        $(derex build forum --only-print-image-name $(OPENEDX_VERSION)) \
-        $(derex build forum --only-print-image-name $(OPENEDX_VERSION)) \
+      docker save $(derex build forum --only-print-image-name $(OPENEDX_VERSION)) \
         | pixz -0 > $(IMAGE_CACHE_PATH)/forum-$(OPENEDX_VERSION).tar.xz
+      ls -la $(IMAGE_CACHE_PATH)
     condition: and(succeeded(), and(ne(variables.needs_build, 'false'), eq(variables.JOB_VARIANT, 'Pinned')))
     displayName: Save images
