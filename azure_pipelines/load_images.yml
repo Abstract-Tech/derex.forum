@@ -1,6 +1,4 @@
 parameters:
-  - name: OPENEDX_VERSION
-    type: string
   - name: CONDITION
     type: string
     default: "true"
@@ -8,10 +6,10 @@ parameters:
 steps:
   - task: Cache@2
     inputs:
-      key: BASE_SEED=$(CACHE_KEY_BASE) | ${{ parameters.OPENEDX_VERSION }} | $(CACHE_KEY_IMAGES)
+      key: BASE_SEED=$(CACHE_KEY_BASE) | $(OPENEDX_VERSION) | $(CACHE_KEY_IMAGES)
       path: $(IMAGE_CACHE_PATH)
       cacheHitVar: "ImagesHit"
-      restoreKeys: BASE_SEED=$(CACHE_KEY_BASE) | ${{ parameters.OPENEDX_VERSION }}
+      restoreKeys: BASE_SEED=$(CACHE_KEY_BASE) | $(OPENEDX_VERSION)
     condition: ${{ parameters.CONDITION }}
     displayName: "Docker images cache"
 
@@ -20,7 +18,7 @@ steps:
       ls -l $(IMAGE_CACHE_PATH)
       docker images
       set -euxo pipefail
-      cat $(IMAGE_CACHE_PATH)/edx-${{ parameters.OPENEDX_VERSION }}.tar.xz | unxz | docker load
+      cat $(IMAGE_CACHE_PATH)/edx-$(OPENEDX_VERSION).tar.xz | unxz | docker load
       docker images
     condition: ${{ parameters.CONDITION }}
-    displayName: "Load ${{ parameters.OPENEDX_VERSION }} images"
+    displayName: "Load $(OPENEDX_VERSION) images"

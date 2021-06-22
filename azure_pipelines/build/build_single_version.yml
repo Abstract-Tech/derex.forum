@@ -8,9 +8,8 @@ steps:
       cacheHitVar: "ImagesSentinelHit"
     displayName: "Docker images sentinel cache"
 
-  - template: load_images.yml
+  - template: ../load_images.yml
     parameters:
-      OPENEDX_VERSION: $(OPENEDX_VERSION)
       CONDITION: ne(variables.ImagesSentinelHit, 'true')
 
   - script: echo '##vso[task.setvariable variable=needs_build]true'
@@ -58,9 +57,7 @@ steps:
     condition: and(succeeded(), ne(variables.needs_build, 'false'))
     displayName: Install pixz
 
-  - template: setup.yml
-    parameters:
-      JOB_VARIANT: $(JOB_VARIANT)
+  - template: ../setup.yml
 
   - script: derex build forum --docker-opts "--cache-to=type=inline -o type=docker" $(OPENEDX_VERSION)
     condition: and(succeeded(), ne(variables.needs_build, 'false'))

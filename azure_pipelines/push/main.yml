@@ -1,0 +1,33 @@
+stages:
+  - stage: Push
+    # Check if pushing is needed only on `master` and `build` branches
+    condition: and(succeeded(), or(eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['Build.SourceBranch'], 'refs/heads/build') ))
+    variables:
+      - group: Docker credentials
+    jobs:
+      - job: ironwood
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: ironwood
+        steps:
+          - template: push_single_version.yml
+
+      - job: juniper
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: juniper
+        steps:
+          - template: push_single_version.yml
+
+      - job: koa
+        pool:
+          vmImage: $(UBUNTU_VERSION)
+        variables:
+          - name: OPENEDX_VERSION
+            value: koa
+        steps:
+          - template: push_single_version.yml

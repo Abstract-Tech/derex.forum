@@ -7,9 +7,9 @@ schedules:
     always: true
 
 stages:
-  - template: azure-pipelines/build.yml
-  - template: azure-pipelines/test.yml
-  # - template: azure-pipelines/push.yml
+  - template: azure_pipelines/build/main.yml
+  - template: azure_pipelines/test/main.yml
+  - template: azure_pipelines/push/main.yml
 
 variables:
   - name: CACHE_KEY_BASE # Increment this value to reset the images cache
