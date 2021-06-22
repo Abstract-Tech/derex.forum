@@ -12,16 +12,6 @@ stages:
   - template: azure_pipelines/push/main.yml
 
 variables:
-  - name: CACHE_KEY_BASE # Increment this value to reset the images cache
-    value: 5
-  - name: CACHE_KEY_FILES
-    value: $(System.DefaultWorkingDirectory)/docker_build/**/*
-  - name: CACHE_KEY_IMAGES
-    value: BASE_SEED=$(CACHE_KEY_BASE) | $(CACHE_KEY_FILES)
-  - name: IMAGE_CACHE_PATH
-    value: $(Pipeline.Workspace)/image_cache
-  - name: SENTINEL_CACHE_PATH
-    value: $(Pipeline.Workspace)/sentinel_cache
   - name: UBUNTU_VERSION
     value: ubuntu-latest
   - name: needs_build

@@ -1,5 +1,6 @@
 stages:
   - stage: Test
+    dependsOn: Build
     jobs:
       - job: MinimalIronwoodUnPinned
         timeoutInMinutes: 40

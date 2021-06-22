@@ -1,13 +1,6 @@
 steps:
-  - task: Cache@2
-    inputs:
-      key: SENTINEL=1 | $(OPENEDX_VERSION) | $(CACHE_KEY_IMAGES)
-      path: $(SENTINEL_CACHE_PATH)
-      cacheHitVar: "ImagesSentinelHit"
-    displayName: "Docker images sentinel cache"
-
   - script: |
-      IMAGE="derex/forum-$(OPENEDX_VERSION)-dev:$(grep __version__ derex/forum/__init__.py |sed 's/[^"]*"//;s/"//')"
+      IMAGE="derex/forum-$(OPENEDX_VERSION):$(grep __version__ derex/forum/__init__.py |sed 's/[^"]*"//;s/"//')"
       echo Checking presence of ${IMAGE} on docker registry
       docker manifest inspect ${IMAGE} || { echo '##vso[task.setvariable variable=needs_push]true'; echo Image not found: pushing ; }
     displayName: "Set needs_push pipeline variable"
@@ -20,13 +13,7 @@ steps:
       DOCKER_PASSWORD: $(DOCKER_PASSWORD)
 
   - template: ../load_images.yml
-    parameters:
-      CONDITION: "ne(variables.needs_push, 'false')"
 
-  - script: docker push derex/forum-$(OPENEDX_VERSION)-dev:$(grep __version__ derex/forum/__init__.py |sed 's/[^"]*"//;s/"//')
+  - script: docker push derex/forum-$(OPENEDX_VERSION):$(grep __version__ derex/forum/__init__.py |sed 's/[^"]*"//;s/"//')
     condition: ne(variables.needs_push, 'false')
-    displayName: "Push $(OPENEDX_VERSION) dev image"
-
-  - script: docker push derex/forum-$(OPENEDX_VERSION)-nostatic:$(grep __version__ derex/forum/__init__.py |sed 's/[^"]*"//;s/"//')
-    condition: ne(variables.needs_push, 'false')
-    displayName: "Push $(OPENEDX_VERSION) nostatic image"
+    displayName: "Push $(OPENEDX_VERSION) image"
