@@ -1,4 +1,4 @@
-name: build
+name: "Build -> Test -> Push"
 on: [push]
 env:
   CACHE_VERSION: 1
@@ -19,16 +19,14 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Setup pip cache
-        id: pip-cache
         uses: actions/cache@v2
         with:
-          # This path is specific to Ubuntu
           path: "${{ github.workspace }}/.cache/pip"
-          # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ env.CACHE_VERSION }}-${{ env.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: ${{ env.CACHE_VERSION }}-${{ env.PYTHON_VERSION }}-pip-
 
-      - uses: ./.github/actions/setup
+      - name: Setup derex
+        uses: ./.github/actions/setup
         with:
           DEVELOPMENT_MODE: true
 
@@ -46,9 +44,14 @@ jobs:
         run: |
           set -x
           export DOCKER_BUILDKIT=1
-          export DOCKER_OPTS="--output type=registry --cache-from type=registry,ref=ghcr.io/abstract-tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache --cache-to=type=registry,ref=ghcr.io/abstract-tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache"
-
+          export DOCKER_OPTS="--output type=docker,dest=/tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar --cache-from type=registry,ref=ghcr.io/abstract-tech/derex-forum-${{ matrix.OPENEDX_VERSION }} --cache-to=type=inline"
           derex build forum ${{ matrix.OPENEDX_VERSION }} --docker-opts "$DOCKER_OPTS"
+
+      - name: Upload built docker image
+        uses: actions/upload-artifact@v2
+        with:
+          name: derex-forum-${{ matrix.OPENEDX_VERSION }}
+          path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
 
   test:
     needs: build
@@ -62,23 +65,121 @@ jobs:
         shell: bash
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Setup pip cache
-        id: pip-cache
         uses: actions/cache@v2
         with:
-          # This path is specific to Ubuntu
           path: "${{ github.workspace }}/.cache/pip"
-          # Look to see if there is a cache hit for the corresponding requirements file
           key: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-
 
-      - uses: actions/setup-python@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Download built docker image
+        uses: actions/download-artifact@v2
         with:
-          python-version: ${{ matrix.PYTHON_VERSION }}
+          name: derex-forum-${{ matrix.OPENEDX_VERSION }}
+          path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+          docker image ls -a
+
+      - name: Setup derex
+        uses: ./.github/actions/setup
+
+      - name: "Start services"
+        run: ddc-services up -d
+
+      - name: "Prime Mysql, Rabbitmq and Elasticsearch"
+        run: |
+          set -ex
+          cd examples/${{ matrix.OPENEDX_VERSION }}/
+          derex mysql reset --force
+          derex reset-rabbitmq
+          derex forum create-index
+
+      - name: "Start lms and forum"
+        run: |
+          set -ex
+          cd examples/${{ matrix.OPENEDX_VERSION }}/
+          ddc-project config
+          derex settings base
+          ddc-project up -d lms forum
+
+      - name: "Show logs"
+        run: |
+          set -ex
+          cd examples/${{ matrix.OPENEDX_VERSION }}/
+          ddc-project logs
+
+      - name: "Test that forum workers are ready"
+        run: |
+          cd examples/${{ matrix.OPENEDX_VERSION }}/
+          WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
+          until [ $WORKERS_READY -gt 0 ]; do
+              echo "Waiting for forum service workers to be ready..."
+              echo $(ddc-project logs --tail=1 forum)
+              sleep 1
+              WORKERS_READY=$(ddc-project logs forum | grep -c "worker=[0-9] ready")
+          done
+          echo "Forum service workers are ready !"
+          echo $(ddc-project logs --tail=5 forum)
+          exit 0
+
+  push:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup pip cache
+        uses: actions/cache@v2
+        with:
+          path: "${{ github.workspace }}/.cache/pip"
+          key: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-
+
+      - name: Setup derex
+        uses: ./.github/actions/setup
+        with:
+          DEVELOPMENT_MODE: true
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
+      - name: Download built docker image
+        uses: actions/download-artifact@v2
+        with:
+          name: derex-forum-${{ matrix.OPENEDX_VERSION }}
+          path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+
+      - name: Load image
+        run: |
+          docker load --input /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+          docker image ls -a
+
+      - name: Tag image as latest if on master
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: |
+          docker tag \
+            $(derex build forum ${{ matrix.OPENEDX_VERSION }} --only-print-image-name) \
+            $(derex build forum ironwood --only-print-image-name | sed 's/:.*/:latest/')
+
+      - name: Do not tag image if we are not on master
+        if: ${{ github.ref != 'refs/heads/master' }}
+        run: |
+          echo "You are not on master ! Infact you are on ${{ github.ref }}"
 
       - name: Login to Github Container Registry
         uses: docker/login-action@v1
@@ -87,9 +188,5 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: ./.github/actions/setup
-
-      - name: Print docker images
-        run: |
-          set -x
-          docker images
+      - name: Push image to docker registry
+        run: docker push $(derex build forum ${{ matrix.OPENEDX_VERSION }} --only-print-image-name | sed 's/:.*//') -a
