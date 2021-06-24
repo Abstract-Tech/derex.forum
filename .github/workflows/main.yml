@@ -83,7 +83,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: derex-forum-${{ matrix.OPENEDX_VERSION }}
-          path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+          path: /tmp
 
       - name: Load image
         run: |
@@ -162,7 +162,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: derex-forum-${{ matrix.OPENEDX_VERSION }}
-          path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
+          path: /tmp
 
       - name: Load image
         run: |
