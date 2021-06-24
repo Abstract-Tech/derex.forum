@@ -46,7 +46,7 @@ jobs:
         run: |
           set -x
           export DOCKER_BUILDKIT=1
-          export DOCKER_OPTS="--output type=registry --cache-from type=registry,ref=ghcr.io/Abstract-Tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache --cache-to=type=registry,ref=ghcr.io/Abstract-Tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache"
+          export DOCKER_OPTS="--output type=registry --cache-from type=registry,ref=ghcr.io/abstract-tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache --cache-to=type=registry,ref=ghcr.io/abstract-tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache"
 
           derex build forum ${{ matrix.OPENEDX_VERSION }} --docker-opts "$DOCKER_OPTS"
 
