@@ -1,6 +1,6 @@
 inputs:
   DEVELOPMENT_MODE:
-    description: "The python version the pipeline is going to use"
+    description: "Wheter the package should be installed in development mode. Defaults to false"
     default: "false"
     required: true
 
