@@ -1,0 +1,31 @@
+inputs:
+  OPENEDX_VERSION:
+    description: "Name of the Openedx release"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set the DOCKER_IMAGE_TAG environment variable
+      run: |
+        set -x
+        echo "DOCKER_IMAGE_TAG=$(derex build forum ${{ inputs.OPENEDX_VERSION }} --only-print-image-name)" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Build
+      run: |
+        set -x
+        export DOCKER_BUILDKIT=1
+        export DOCKER_OPTS="--cache-from type=registry,ref=${{ env.DOCKER_IMAGE_TAG }} --cache-to=type=inline --load"
+        derex build forum ${{ inputs.OPENEDX_VERSION }} --docker-opts "$DOCKER_OPTS"
+      shell: bash
+
+    - name: Set DOCKER_IMAGE_TAG output
+      id: set-docker-image-tag
+      run: echo "::set-output name=DOCKER_IMAGE_TAG::$(echo ${{ env.DOCKER_IMAGE_TAG }})"
+      shell: bash
+
+outputs:
+  DOCKER_IMAGE_TAG:
+    description: "The tag assigned to the built docker image"
+    value: ${{ steps.set-docker-image-tag.outputs.DOCKER_IMAGE_TAG }}

@@ -1,0 +1,46 @@
+name: build
+on: [push]
+jobs:
+  ironwood:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: [3.6, 3.7, 3.8]
+        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.PYTHON_VERSION }}
+
+      - name: Cache pip packages
+        id: cache-pip
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: "{{ github.workspace }}/.cache/pip"
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ matrix.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ matrix.PYTHON_VERSION }}-pip-
+            ${{ matrix.PYTHON_VERSION }}-
+
+      - uses: ./.github/actions/setup
+        with:
+          DEVELOPMENT_MODE: true
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: derexop
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+      - uses: ./.github/actions/build_version
+        with:
+          OPENEDX_VERSION: ${{ matrix.OPENEDX_VERSION }}
