@@ -3,13 +3,13 @@ from pathlib import Path
 from typing import Dict, List, Union
 
 import pkg_resources
-
-from derex import runner  # type: ignore
-from derex.forum import __version__
 from derex.runner.constants import MONGODB_ROOT_USER
 from derex.runner.mongodb import MONGODB_ROOT_PASSWORD
 from derex.runner.project import Project
 from jinja2 import Template
+
+from derex import runner  # type: ignore
+from derex.forum import __version__
 
 
 def generate_local_docker_compose(project: Project) -> Path:

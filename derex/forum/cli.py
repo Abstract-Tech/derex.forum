@@ -3,18 +3,18 @@ import sys
 from distutils.spawn import find_executable
 
 import click
-from derex.forum import __version__
-from derex.forum.constants import ForumVersions
 from derex.runner.cli import ensure_project
 from derex.runner.cli.build import build as derex_build_cli
 from derex.runner.utils import abspath_from_egg
+
+from derex.forum import __version__
+from derex.forum.constants import ForumVersions
 
 
 @click.group()
 @click.pass_context
 def forum(ctx):
-    """Derex edX Forum plugin: commands to manage the Open edX Forum service
-    """
+    """Derex edX Forum plugin: commands to manage the Open edX Forum service"""
     pass
 
 
@@ -23,8 +23,8 @@ def forum(ctx):
 @ensure_project
 def create_index(project):
     """Prime the elasticsearch index for the Forum service"""
-    from derex.runner.docker_utils import wait_for_service
     from derex.runner.ddc import run_ddc_project
+    from derex.runner.docker_utils import wait_for_service
 
     try:
         wait_for_service("elasticsearch")
@@ -58,7 +58,9 @@ def create_index(project):
     "--push/--no-push", default=False, help="Also push image to registry after building"
 )
 @click.option(
-    "--only-print-image-name/--do-build", default=False, help="Only print image name",
+    "--only-print-image-name/--do-build",
+    default=False,
+    help="Only print image name",
 )
 @click.option(
     "-d",
