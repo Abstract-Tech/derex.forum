@@ -1,0 +1,95 @@
+name: build
+on: [push]
+env:
+  CACHE_VERSION: 1
+  PYTHON_VERSION: 3.6
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup pip cache
+        id: pip-cache
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: "${{ github.workspace }}/.cache/pip"
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ env.CACHE_VERSION }}-${{ env.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ env.CACHE_VERSION }}-${{ env.PYTHON_VERSION }}-pip-
+
+      - uses: ./.github/actions/setup
+        with:
+          DEVELOPMENT_MODE: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build
+        run: |
+          set -x
+          export DOCKER_BUILDKIT=1
+          export DOCKER_OPTS="--output type=registry --cache-from type=registry,ref=ghcr.io/Abstract-Tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache --cache-to=type=registry,ref=ghcr.io/Abstract-Tech/derex-forum-${{ matrix.OPENEDX_VERSION }}:cache"
+
+          derex build forum ${{ matrix.OPENEDX_VERSION }} --docker-opts "$DOCKER_OPTS"
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        PYTHON_VERSION: [3.6, 3.7, 3.8]
+        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup pip cache
+        id: pip-cache
+        uses: actions/cache@v2
+        with:
+          # This path is specific to Ubuntu
+          path: "${{ github.workspace }}/.cache/pip"
+          # Look to see if there is a cache hit for the corresponding requirements file
+          key: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: ${{ env.CACHE_VERSION }}-${{ matrix.PYTHON_VERSION }}-pip-
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.PYTHON_VERSION }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Github Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: ./.github/actions/setup
+
+      - name: Print docker images
+        run: |
+          set -x
+          docker images
