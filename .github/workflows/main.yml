@@ -114,6 +114,8 @@ jobs:
           derex settings base
           derex build final
           ddc-project up -d lms forum
+
+          # Give the containers some time to boot
           sleep 10
 
       - name: "Show logs"
