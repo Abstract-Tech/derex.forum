@@ -1,8 +1,6 @@
-===========
-Derex Forum
-===========
+# Derex Forum
 
-[![Github Actions](https://github.com/Abstract-Tech/derex.forum/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/Abstract-Tech/derex.forum/actions/workflows/main.yml)
+[![Github Actions](https://github.com/Abstract-Tech/derex.forum/actions/workflows/daily.yml/badge.svg?branch=master)](https://github.com/Abstract-Tech/derex.forum/actions/workflows/daily.yml)
 
 Derex Plugin to integrate Open edX Forum
 

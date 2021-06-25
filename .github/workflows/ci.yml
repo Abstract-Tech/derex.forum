@@ -1,5 +1,14 @@
-name: "Build -> Test -> Push"
-on: [push]
+name: "CI workflow"
+on:
+  push:
+    # We need to specify we want to run only on branch pushes
+    # and not tags
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
 env:
   CACHE_VERSION: 1
   PYTHON_VERSION: 3.6
