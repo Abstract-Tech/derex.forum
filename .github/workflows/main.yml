@@ -5,6 +5,7 @@ env:
   PYTHON_VERSION: 3.6
 jobs:
   build:
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -54,6 +55,7 @@ jobs:
           path: /tmp/derex-forum-${{ matrix.OPENEDX_VERSION }}.tar
 
   test:
+    name: Test
     needs: build
     runs-on: ubuntu-latest
     strategy:
@@ -110,6 +112,7 @@ jobs:
           cd examples/${{ matrix.OPENEDX_VERSION }}/
           ddc-project config
           derex settings base
+          derex build final
           ddc-project up -d lms forum
 
       - name: "Show logs"
@@ -133,6 +136,7 @@ jobs:
           exit 0
 
   push:
+    name: Push
     needs: test
     runs-on: ubuntu-latest
     strategy:
