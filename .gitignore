@@ -109,6 +109,3 @@ ENV/
 
 # Derex
 .derex
-
-# Azure Pipelines
-!azure_pipelines/build
