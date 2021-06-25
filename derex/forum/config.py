@@ -10,6 +10,7 @@ from jinja2 import Template
 
 from derex import runner  # type: ignore
 from derex.forum import __version__
+from derex.forum.constants import ForumVersions
 
 
 def generate_local_docker_compose(project: Project) -> Path:
@@ -20,9 +21,11 @@ def generate_local_docker_compose(project: Project) -> Path:
     template_path = Path(
         pkg_resources.resource_filename(__name__, "docker-compose-forum.yml.j2")
     )
+    default_docker_image_prefix = ForumVersions[project.openedx_version.name].value[
+        "docker_image_prefix"
+    ]
     forum_docker_image = project.config.get(
-        "forum_docker_image",
-        f"derex/forum-{project.openedx_version.name}:{__version__}",
+        "forum_docker_image", f"{default_docker_image_prefix}:{__version__}"
     )
     mongodb_root_user = urllib.parse.quote_plus(MONGODB_ROOT_USER)
     mongodb_root_password = urllib.parse.quote_plus(MONGODB_ROOT_PASSWORD)
