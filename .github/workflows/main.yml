@@ -114,6 +114,7 @@ jobs:
           derex settings base
           derex build final
           ddc-project up -d lms forum
+          sleep 10
 
       - name: "Show logs"
         run: |
