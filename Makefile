@@ -65,7 +65,7 @@ coverage: ## check code coverage quickly with the default Python
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/derex.forum.rst
 	rm -f docs/modules.rst
-	sphinx-apidoc -o docs/ derex.forum
+	sphinx-apidoc -o docs/ derex/forum
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html

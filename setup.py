@@ -1,6 +1,6 @@
 from setuptools import find_namespace_packages, setup
 
-with open("README.rst") as readme_file:
+with open("README.md") as readme_file:
     readme = readme_file.read()
 
 with open("HISTORY.rst") as history_file:
@@ -51,6 +51,9 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/Abstract-Tech/derex.forum",
-    version="0.0.1",
+    version="0.2.0",
     zip_safe=False,
+    dependency_links=[
+        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.1#egg=derex.runner"
+    ],
 )
