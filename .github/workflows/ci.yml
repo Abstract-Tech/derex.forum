@@ -1,11 +1,14 @@
 name: "CI workflow"
 on:
   push:
+    # This will avoid multiple pipelines for being started when pushing
+    # to a PR branch.
+    # It will run the pipeline when the PR is merged though
+    branches:
+      - master
+  pull_request:
     # We need to specify we want to run only on branch pushes
     # and not tags
-    branches:
-      - "**"
-  pull_request:
     branches:
       - "**"
 
