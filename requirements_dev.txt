@@ -11,7 +11,7 @@ alabaster==0.7.12
 appdirs==1.4.4
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
     #   virtualenv
 astroid==2.6.0
     # via
@@ -49,16 +49,16 @@ chardet==4.0.0
     #   -r requirements.txt
     #   -r requirements_doc.txt
     #   requests
-click-plugins==1.1.1
-    # via
-    #   -r requirements.txt
-    #   derex.runner
 click==8.0.1
     # via
     #   -r requirements.txt
     #   click-plugins
-    #   derex.runner
+    #   derex-runner
     #   pip-tools
+click-plugins==1.1.1
+    # via
+    #   -r requirements.txt
+    #   derex-runner
 colorama==0.4.4
     # via
     #   -r requirements.txt
@@ -71,7 +71,7 @@ cryptography==3.4.7
     # via
     #   -r requirements.txt
     #   paramiko
-https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.1#egg=derex.runner
+derex.runner @ https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.1
     # via -r requirements.txt
 distlib==0.3.2
     # via virtualenv
@@ -79,14 +79,14 @@ distro==1.5.0
     # via
     #   -r requirements.txt
     #   docker-compose
-docker-compose==1.29.2
-    # via
-    #   -r requirements.txt
-    #   derex.runner
 docker[ssh]==5.0.0
     # via
     #   -r requirements.txt
     #   docker-compose
+docker-compose==1.29.2
+    # via
+    #   -r requirements.txt
+    #   derex-runner
 dockerpty==0.4.1
     # via
     #   -r requirements.txt
@@ -115,12 +115,12 @@ imagesize==1.2.0
 importlib-metadata==4.5.0
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 jinja2==3.0.1
     # via
     #   -r requirements.txt
     #   -r requirements_doc.txt
-    #   derex.runner
+    #   derex-runner
     #   sphinx
     #   sphinx-autoapi
 jsonschema==3.2.0
@@ -142,7 +142,7 @@ packaging==20.9
     # via
     #   -r requirements_doc.txt
     #   sphinx
-paramiko==2.7.2
+paramiko==2.10.1
     # via
     #   -r requirements.txt
     #   docker
@@ -153,13 +153,13 @@ pip-tools==6.2.0
 pluggy==0.13.1
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 pre-commit==2.13.0
     # via -r requirements_dev.in
 py==1.10.0
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 pycparser==2.20
     # via
     #   -r requirements.txt
@@ -173,11 +173,11 @@ pygments==2.9.0
 pymongo==3.11.4
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 pymysql==1.0.2
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 pynacl==1.4.0
     # via
     #   -r requirements.txt
@@ -202,7 +202,7 @@ pyyaml==5.4.1
     # via
     #   -r requirements.txt
     #   -r requirements_doc.txt
-    #   derex.runner
+    #   derex-runner
     #   docker-compose
     #   pre-commit
     #   sphinx-autoapi
@@ -216,13 +216,14 @@ requests==2.25.1
 rich==10.4.0
     # via
     #   -r requirements.txt
-    #   derex.runner
+    #   derex-runner
 six==1.16.0
     # via
     #   -r requirements.txt
     #   bcrypt
     #   dockerpty
     #   jsonschema
+    #   paramiko
     #   pynacl
     #   virtualenv
     #   websocket-client
@@ -230,15 +231,15 @@ snowballstemmer==2.1.0
     # via
     #   -r requirements_doc.txt
     #   sphinx
-sphinx-autoapi==1.8.1
-    # via -r requirements_doc.txt
-sphinx-press-theme==0.7.3
-    # via -r requirements_doc.txt
 sphinx==4.0.2
     # via
     #   -r requirements_doc.txt
     #   sphinx-autoapi
     #   sphinx-press-theme
+sphinx-autoapi==1.8.1
+    # via -r requirements_doc.txt
+sphinx-press-theme==0.7.3
+    # via -r requirements_doc.txt
 sphinxcontrib-applehelp==1.0.2
     # via
     #   -r requirements_doc.txt
@@ -279,7 +280,7 @@ urllib3==1.26.5
     # via
     #   -r requirements.txt
     #   -r requirements_doc.txt
-    #   derex.runner
+    #   derex-runner
     #   requests
 virtualenv==20.4.7
     # via pre-commit
