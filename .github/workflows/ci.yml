@@ -14,14 +14,14 @@ on:
 
 env:
   CACHE_VERSION: 1
-  PYTHON_VERSION: 3.6
+  PYTHON_VERSION: 3.7
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+        OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
         shell: bash
@@ -72,8 +72,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        PYTHON_VERSION: [3.6, 3.7, 3.8]
-        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+        PYTHON_VERSION: [3.7, 3.7, 3.8, 3.9, 3.10]
+        OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
         shell: bash
@@ -156,7 +156,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+        OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
         shell: bash
@@ -193,7 +193,7 @@ jobs:
         run: |
           docker tag \
             $(derex build forum ${{ matrix.OPENEDX_VERSION }} --only-print-image-name) \
-            $(derex build forum ironwood --only-print-image-name | sed 's/:.*/:latest/')
+            $(derex build forum ${{ matrix.OPENEDX_VERSION }} --only-print-image-name | sed 's/:.*/:latest/')
 
       - name: Do not tag image if we are not on master
         if: ${{ github.ref != 'refs/heads/master' }}

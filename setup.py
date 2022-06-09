@@ -29,10 +29,10 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
     ],
     description="Derex Plugin to integrate Open edX Forum",
     entry_points={
@@ -51,9 +51,9 @@ setup(
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/Abstract-Tech/derex.forum",
-    version="0.2.1",
+    version="0.2.2",
     zip_safe=False,
     dependency_links=[
-        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.1#egg=derex.runner"
+        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.4#egg=derex.runner"
     ],
 )

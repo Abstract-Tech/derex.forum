@@ -35,4 +35,4 @@ ENV MONGOID_AUTH_SOURCE="admin"
 EXPOSE 4567
 CMD /openedx/forum/bin/unicorn -c config/unicorn_tcp.rb -I '.'
 
-ENV DEREX_FORUM_VERSION=0.2.1
+ENV DEREX_FORUM_VERSION=0.2.2

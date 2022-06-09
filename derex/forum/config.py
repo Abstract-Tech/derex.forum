@@ -29,12 +29,14 @@ def generate_local_docker_compose(project: Project) -> Path:
     )
     mongodb_root_user = urllib.parse.quote_plus(MONGODB_ROOT_USER)
     mongodb_root_password = urllib.parse.quote_plus(MONGODB_ROOT_PASSWORD)
+    mongodb_host = "mongodb4" if project.openedx_version.name == "lilac" else "mongodb"
     tmpl = Template(template_path.read_text())
     text = tmpl.render(
         project=project,
         forum_docker_image=forum_docker_image,
         MONGODB_ROOT_USER=mongodb_root_user,
         MONGODB_ROOT_PASSWORD=mongodb_root_password,
+        MONGODB_HOST=mongodb_host,
     )
     local_compose_path.write_text(text)
     return local_compose_path
