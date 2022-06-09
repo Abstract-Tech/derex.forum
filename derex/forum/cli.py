@@ -27,10 +27,18 @@ def create_index(project):
     from derex.runner.docker_utils import wait_for_service
 
     try:
-        wait_for_service("elasticsearch")
+        if project.openedx_version.name == "lilac":
+            wait_for_service("elasticsearch7")
+        else:
+            wait_for_service("elasticsearch")
     except (TimeoutError, RuntimeError, NotImplementedError) as exc:
         click.echo(click.style(str(exc), fg="red"))
         sys.exit(1)
+
+    if project.openedx_version.name == "lilac":
+        cmd = "bundle exec rake search:initialize && bundle exec rake search:rebuild_indices"
+    else:
+        cmd = "bundle exec rake search:initialize && bundle exec rake search:rebuild_index"
 
     compose_args = [
         "run",
@@ -39,11 +47,44 @@ def create_index(project):
         "forum",
         "sh",
         "-c",
-        """bundle exec rake search:initialize &&
-        bundle exec rake search:rebuild_index
-        """,
+        cmd,
     ]
-    run_ddc_project(compose_args, project=project)
+    run_ddc_project(compose_args, project)
+    return 0
+
+
+@forum.command("rebuild-indices")
+@click.pass_obj
+@ensure_project
+def rebuild_indices(project):
+    """Rebuild the elasticsearch index for the Forum service"""
+    from derex.runner.ddc import run_ddc_project
+    from derex.runner.docker_utils import wait_for_service
+
+    try:
+        if project.openedx_version.name == "lilac":
+            wait_for_service("elasticsearch7")
+        else:
+            wait_for_service("elasticsearch")
+    except (TimeoutError, RuntimeError, NotImplementedError) as exc:
+        click.echo(click.style(str(exc), fg="red"))
+        sys.exit(1)
+
+    if project.openedx_version.name == "lilac":
+        cmd = "bundle exec rake search:rebuild_indices"
+    else:
+        cmd = "bundle exec rake search:rebuild_index"
+
+    compose_args = [
+        "run",
+        "--rm",
+        "-T",
+        "forum",
+        "sh",
+        "-c",
+        cmd,
+    ]
+    run_ddc_project(compose_args, project)
     return 0
 
 

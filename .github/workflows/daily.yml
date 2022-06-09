@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+        OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
         shell: bash
@@ -64,8 +64,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        PYTHON_VERSION: [3.6, 3.7, 3.8]
-        OPENEDX_VERSION: ["ironwood", "juniper", "koa"]
+        PYTHON_VERSION: [3.6, 3.7, 3.8, 3.9, 3.10]
+        OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
         shell: bash

@@ -1,4 +1,3 @@
----
 project_name: forum-koa-minimal
 openedx_version: koa
 materialize_derex_settings: false

@@ -1,0 +1,6 @@
+project_name: forum-lilac-minimal
+openedx_version: lilac
+materialize_derex_settings: false
+base_image: derex/openedx-lilac-dev:0.3.4
+plugins:
+  derex.forum: {}

@@ -54,6 +54,6 @@ setup(
     version="0.2.1",
     zip_safe=False,
     dependency_links=[
-        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.1#egg=derex.runner"
+        "https://github.com/Abstract-Tech/derex.runner/tarball/v0.3.4#egg=derex.runner"
     ],
 )

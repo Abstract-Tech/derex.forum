@@ -1,6 +1,0 @@
----
-project_name: forum-ironwood-minimal
-openedx_version: ironwood
-materialize_derex_settings: false
-plugins:
-  derex.forum: {}
