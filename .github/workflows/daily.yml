@@ -5,7 +5,7 @@ on:
 
 env:
   CACHE_VERSION: 1
-  PYTHON_VERSION: 3.6
+  PYTHON_VERSION: 3.7
 jobs:
   build:
     name: Build
@@ -64,7 +64,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        PYTHON_VERSION: [3.6, 3.7, 3.8, 3.9, 3.10]
+        PYTHON_VERSION: [3.7, 3.7, 3.8, 3.9, 3.10]
         OPENEDX_VERSION: ["juniper", "koa", "lilac"]
     defaults:
       run:
